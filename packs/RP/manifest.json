@@ -1,0 +1,24 @@
+{
+    "format_version": 2,
+    "header": {
+      "name": "Job Menu x Land Claim",
+      "description": "",
+      "uuid": "0b5da932-1feb-11f0-99a7-7730e4d1eb4a",
+      "version": [2, 0, 0],
+      "min_engine_version": [1, 21, 70]
+    },
+    "modules": [
+      {
+        "type": "resources",
+        "uuid": "046bd7c0-1feb-11f0-9f2a-9f90eac7342e",
+        "version": [2, 0, 0]
+      }
+    ],
+    "dependencies": [
+      {
+        "uuid": "f7b7f4b4-1fea-11f0-8d8a-3b00c01bdfad",
+        "version": [2, 0, 0]
+      }
+    ]
+  }
+  

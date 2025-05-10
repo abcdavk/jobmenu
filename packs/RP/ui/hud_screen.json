@@ -1,0 +1,35 @@
+{
+    "namespace": "hud",
+    "hud_actionbar_text": {
+        "type": "image",
+        "size": [
+            "100%c + 12px",
+            "100%c + 5px"
+        ],
+        "offset": [
+            -20,
+            20
+        ],
+        "anchor_from": "top_right",
+        "anchor_to": "top_right",
+        "texture": "textures/ui/button_disabled",
+        "controls": [
+            {
+                "actionbar_message": {
+                    "type": "label",
+                    "anchor_from": "left_middle",
+                    "anchor_to": "left_middle",
+                    "color": "$tool_tip_text",
+                    "layer": 31,
+                    "text": "$actionbar_text",
+                    "localize": false,
+
+                    "offset": [
+                        3,
+                        0
+                    ]
+                }
+            }
+        ]
+    }
+}

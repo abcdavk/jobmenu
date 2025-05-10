@@ -1,0 +1,58 @@
+{
+    "format_version": "1.21.40",
+    "lc:protection_block_25": {
+        "textures": {
+            "down": "protection_block_top",
+            "up": "protection_block_top",
+            "north": "protection_block_side",
+            "east": "protection_block_side",
+            "south": "protection_block_side",
+            "west": "protection_block_side"
+        },
+        "sound" : "stone"
+    },
+    "lc:protection_block_50": {
+        "textures": {
+            "down": "protection_block_top",
+            "up": "protection_block_top",
+            "north": "protection_block_side",
+            "east": "protection_block_side",
+            "south": "protection_block_side",
+            "west": "protection_block_side"
+        },
+        "sound" : "stone"
+    },
+    "lc:protection_block_75": {
+        "textures": {
+            "down": "protection_block_top",
+            "up": "protection_block_top",
+            "north": "protection_block_side",
+            "east": "protection_block_side",
+            "south": "protection_block_side",
+            "west": "protection_block_side"
+        },
+        "sound" : "stone"
+    },
+    "lc:protection_block_100": {
+        "textures": {
+            "down": "protection_block_top",
+            "up": "protection_block_top",
+            "north": "protection_block_side",
+            "east": "protection_block_side",
+            "south": "protection_block_side",
+            "west": "protection_block_side"
+        },
+        "sound" : "stone"
+    },
+    "lc:protection_block_250": {
+        "textures": {
+            "down": "protection_block_top",
+            "up": "protection_block_top",
+            "north": "protection_block_side",
+            "east": "protection_block_side",
+            "south": "protection_block_side",
+            "west": "protection_block_side"
+        },
+        "sound" : "stone"
+    }
+}

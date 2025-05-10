@@ -1,0 +1,20 @@
+{
+	"format_version": "1.20.20",
+	"minecraft:block": {
+		"description": {
+			"identifier": "lc:protection_block_75",
+			"menu_category": {
+				"category": "items",
+				"group": "itemGroup.name.protection_block"
+			}
+		},
+		"components": {
+			"minecraft:display_name": "Protection Block [75 Blocks]",
+			"minecraft:geometry": "minecraft:geometry.full_block",
+			"minecraft:destructible_by_mining": {
+				"seconds_to_destroy": 2.5
+			},
+			"minecraft:destructible_by_explosion": false
+		}
+	}
+}

@@ -1,0 +1,40 @@
+{
+    "format_version": 2,
+    "header": {
+      "name": "Job Menu x Land Claim",
+      "description": "",
+      "uuid": "f7b7f4b4-1fea-11f0-8d8a-3b00c01bdfad",
+      "version": [2, 0, 0],
+      "min_engine_version": [1, 21, 70]
+    },
+    "modules": [
+      {
+        "description": "Script resources",
+        "language": "javascript",
+        "type": "script",
+        "uuid": "181aedc4-1feb-11f0-aac4-b78e88e332af",
+        "version": [1, 0, 0],
+        "entry": "scripts/main.js"
+      },
+      {
+        "type": "data",
+        "uuid": "132e6606-1feb-11f0-b496-97de1502c066",
+        "version": [2, 0, 0]
+      }
+    ],
+    "dependencies": [
+      {
+        "uuid": "0b5da932-1feb-11f0-99a7-7730e4d1eb4a",
+        "version": [2, 0, 0]
+      },
+      {
+        "module_name": "@minecraft/server",
+        "version": "2.0.0-beta"
+      },
+      {
+        "module_name": "@minecraft/server-ui",
+        "version": "2.0.0-beta"
+      }
+    ]
+  }
+  

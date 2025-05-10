@@ -1,0 +1,13 @@
+{
+    "num_mip_levels": 4,
+    "padding": 8,
+    "resource_pack_name": "vanilla",
+    "texture_data": {
+        "protection_block_top": {
+            "textures": "textures/blocks/protection_block_top"
+        },
+        "protection_block_side": {
+            "textures": "textures/blocks/protection_block_side"
+        }
+    }
+}

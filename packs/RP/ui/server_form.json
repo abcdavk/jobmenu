@@ -1,0 +1,309 @@
+{
+    "namespace": "server_form",
+    "third_party_server_screen@common.base_screen": {
+        "$screen_content": "server_form.server_form",
+        "button_mappings": [
+            {
+                "from_button_id": "button.menu_cancel",
+                "to_button_id": "button.menu_exit",
+                "mapping_type": "global"
+            }
+        ]
+    },
+    "server_form": {
+        "type": "panel",
+        "size": [
+            "100%",
+            "100%"
+        ],
+        "controls": [
+            {
+                "server_form_factory": {
+                    "type": "factory",
+                    "control_ids": {
+                        "long_form": "@server_form.long_form",
+                        "custom_form": "@server_form.custom_form"
+                    }
+                }
+            }
+        ]
+    },
+    "long_form@starlib_pkg_screen_template.screen": {
+        "$SCREEN_TEMPLATE_fade_enabled": true,
+
+        
+
+        "$FORM_TEMPLATE_appear_sub_contents_padding": true,
+        "$FORM_TEMPLATE_appear_header_padding": false,
+        "$FORM_TEMPLATE_background_texture": "textures/ui/background",
+        "$FORM_TEMPLATE_between_contents_padding_size": [
+            0,
+            1
+        ],
+        "$FORM_TEMPLATE_content_size": [
+            "100% - 14px",
+            "100% - 14px"
+        ],
+
+        "$BUTTON_STYLE_default_texture": "textures/ui/button",
+        "$COMMON_BUTTON_hover_control": "server_form.hover",
+        "$COMMON_BUTTON_pressed_control": "server_form.hover",
+        
+
+        "$COMMON_BUTTON_panel_control": "starlib_pkg_button_common.disabled_variable_button_panel",
+        "$BUTTON_STYLE_disabled_variable_key": "§m§0§0",
+        "$BUTTON_STYLE_disabled_variable_texture": "textures/ui/button_disabled",
+        
+        "$forms_holder_controls": [
+            // {
+            //     "form@global.reverse_title_binding": {
+            //         "$form_size": [
+            //             280,
+            //             225
+            //         ],
+            //         "$SCROLLING_CONTENT_form_text_control": "server_form.form_text",
+            //         "$button_item_control": "starlib_pkg_button_templates.horizontal_button_template",
+            //         "$BORDERED_BUTTON_background_control": "global.empty_panel",
+            //         "$SCROLLING_CONTENT_additional_content_margins_size": [
+            //             0,
+            //             1
+            //         ],
+            //         "$key": "§f§0§0",
+            //         "$control": "starlib_pkg_screen_template.form_template",
+            //         "size": [
+            //             "100%c",
+            //             "100%c"
+            //         ]
+            //     }
+            // },
+            {
+                "showalljobs@global.title_binding": {
+                    "$form_size": [
+                        655,
+                        155
+                    ],
+                    "$scrolling_content": "server_form.buttons_grid",
+                    
+                    "$CLOSE_BUTTON_size": [
+                        "100%",
+                        18
+                    ],
+
+                    "$HEADER_TEMPLATE_close_button_control": "global.empty_panel",
+                    "$FORM_TEMPLATE_sub_content_control": "starlib_pkg_screen_common.async_close_button",
+                    "$CLOSE_BUTTON_text_enabled": true,
+                    "$CLOSE_BUTTON_default_control": "server_form.close_button",
+                    "$CLOSE_BUTTON_hover_control": "server_form.hover",
+                    "$CLOSE_BUTTON_pressed_control": "server_form.hover",
+                    "$CLOSE_BUTTON_text_offset": [
+                        0,
+                        -2
+                    ],
+
+                    "$HEADER_TEMPLATE_style_control": "server_form.header",
+                    "$CONTENT_between_contents_padding_size": [
+                        5,
+                        0
+                    ],
+                    "$CUBIC_BUTTON_image_size": [
+                        "70% - 16px",
+                        "70% - 16px"
+                    ],
+                    "$CUBIC_BUTTON_bottom_padding_size": [
+                        0,
+                        3
+                    ],
+                    "$key": "§f§0§0",
+                    "$control": "starlib_pkg_screen_template.form_template",
+                    "size": [
+                        "100%c",
+                        "100%c"
+                    ]
+                }
+            },
+            {
+                "main_menu@global.title_binding": {
+                    "$form_size": [
+                        190,
+                        225
+                    ],
+                    "$HEADER_TEMPLATE_style_control": "server_form.header",
+                    "$SCROLLING_CONTENT_form_text_control": "server_form.form_text",
+
+                    "$button_item_control": "starlib_pkg_button_templates.horizontal_button_template",
+                    "$BORDERED_BUTTON_background_control": "global.empty_panel",
+
+                    "$key": "§f§0§1",
+                    "$control": "starlib_pkg_screen_template.form_template",
+                    "size": [
+                        "100%c",
+                        "100%c"
+                    ]
+                }
+            },
+            {
+                "job_farm@global.title_binding": {
+                    "$form_size": [
+                        190,
+                        225
+                    ],
+                    "$HEADER_TEMPLATE_style_control": "server_form.header_light_blue",
+                    "$SCROLLING_CONTENT_form_text_control": "server_form.form_text",
+
+                    "$button_item_control": "starlib_pkg_button_templates.horizontal_button_template",
+                    "$BORDERED_BUTTON_background_control": "global.empty_panel",
+
+                    "$key": "§f§1§0",
+                    "$control": "starlib_pkg_screen_template.form_template",
+                    "size": [
+                        "100%c",
+                        "100%c"
+                    ]
+                }
+            },
+            {
+                "job_kill@global.title_binding": {
+                    "$form_size": [
+                        190,
+                        225
+                    ],
+                    "$HEADER_TEMPLATE_style_control": "server_form.header_green",
+                    "$SCROLLING_CONTENT_form_text_control": "server_form.form_text",
+
+                    "$button_item_control": "starlib_pkg_button_templates.horizontal_button_template",
+                    "$BORDERED_BUTTON_background_control": "global.empty_panel",
+
+                    "$key": "§f§1§1",
+                    "$control": "starlib_pkg_screen_template.form_template",
+                    "size": [
+                        "100%c",
+                        "100%c"
+                    ]
+                }
+            },
+            {
+                "job_dig@global.title_binding": {
+                    "$form_size": [
+                        190,
+                        225
+                    ],
+                    "$HEADER_TEMPLATE_style_control": "server_form.header_purple",
+                    "$SCROLLING_CONTENT_form_text_control": "server_form.form_text",
+
+                    "$button_item_control": "starlib_pkg_button_templates.horizontal_button_template",
+                    "$BORDERED_BUTTON_background_control": "global.empty_panel",
+
+                    "$key": "§f§1§2",
+                    "$control": "starlib_pkg_screen_template.form_template",
+                    "size": [
+                        "100%c",
+                        "100%c"
+                    ]
+                }
+            },
+            {
+                "job_fish@global.title_binding": {
+                    "$form_size": [
+                        190,
+                        225
+                    ],
+                    "$HEADER_TEMPLATE_style_control": "server_form.header_red",
+                    "$SCROLLING_CONTENT_form_text_control": "server_form.form_text",
+
+                    "$button_item_control": "starlib_pkg_button_templates.horizontal_button_template",
+                    "$BORDERED_BUTTON_background_control": "global.empty_panel",
+
+                    "$key": "§f§1§3",
+                    "$control": "starlib_pkg_screen_template.form_template",
+                    "size": [
+                        "100%c",
+                        "100%c"
+                    ]
+                }
+            },
+            {
+                "job_mine@global.title_binding": {
+                    "$form_size": [
+                        190,
+                        225
+                    ],
+                    "$HEADER_TEMPLATE_style_control": "server_form.header_blue",
+                    "$SCROLLING_CONTENT_form_text_control": "server_form.form_text",
+
+                    "$button_item_control": "starlib_pkg_button_templates.horizontal_button_template",
+                    "$BORDERED_BUTTON_background_control": "global.empty_panel",
+
+                    "$key": "§f§1§4",
+                    "$control": "starlib_pkg_screen_template.form_template",
+                    "size": [
+                        "100%c",
+                        "100%c"
+                    ]
+                }
+            },
+            {
+                "job_mine@global.title_binding": {
+                    "$form_size": [
+                        190,
+                        225
+                    ],
+                    "$HEADER_TEMPLATE_style_control": "server_form.header_yellow",
+                    "$SCROLLING_CONTENT_form_text_control": "server_form.form_text",
+
+                    "$button_item_control": "starlib_pkg_button_templates.horizontal_button_template",
+                    "$BORDERED_BUTTON_background_control": "global.empty_panel",
+
+                    "$key": "§f§1§5",
+                    "$control": "starlib_pkg_screen_template.form_template",
+                    "size": [
+                        "100%c",
+                        "100%c"
+                    ]
+                }
+            }
+        ]
+    },
+    "buttons_grid@global.grid": {
+        "$grid_item": "server_form.grid_button"
+    },
+    "grid_button@starlib_pkg_button_templates.grid_item_template": {
+        "$GRID_ITEM_root_control": "starlib_pkg_button_templates.cubic_button",
+        "$GRID_ITEM_size": [
+            91,
+            91
+        ]
+    },
+    "header@style.image": {
+        "texture": "textures/ui/header"
+    },
+    "header_blue@style.image": {
+        "texture": "textures/ui/header_blue"
+    },
+    "header_green@style.image": {
+        "texture": "textures/ui/header_green"
+    },
+    "header_light_blue@style.image": {
+        "texture": "textures/ui/header_light_blue"
+    },
+    "header_red@style.image": {
+        "texture": "textures/ui/header_red"
+    },
+    "header_yellow@style.image": {
+        "texture": "textures/ui/header_yellow"
+    },
+    "header_purple@style.image": {
+        "texture": "textures/ui/header_purple"
+    },
+    "close_button@style.image": {
+        "texture": "textures/ui/button"
+    },
+    "hover@style.image": {
+        "texture": "textures/ui/button_hover"
+    },
+    "form_text@starlib_pkg_screen_common.form_text_template": {
+        "size": [
+            "100% - 2px",
+            "default"
+        ]
+    }
+}
