@@ -1,2 +1,2 @@
-import "./jobMenu";
-import "./landClaim";
+import "./jobMenu/jobMenu";
+import "./landClaim/landClaim";

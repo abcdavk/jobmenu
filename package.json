@@ -14,8 +14,8 @@
   "description": "",
   "dependencies": {
     "@babel/plugin-transform-typescript": "^7.27.0",
-    "@minecraft/server": "^2.0.0-beta.1.21.70-stable",
-    "@minecraft/server-ui": "^2.0.0-beta.1.21.70-stable",
+    "@minecraft/server": "^2.0.0-beta.1.21.80-stable",
+    "@minecraft/server-ui": "^2.0.0-beta.1.21.80-stable",
     "yarn": "^1.22.22"
   },
   "devDependencies": {
