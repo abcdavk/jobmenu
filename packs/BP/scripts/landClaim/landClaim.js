@@ -8,6 +8,7 @@ world.afterEvents.playerSpawn.subscribe(({ player }) => {
     world.setDynamicProperty("lc:protection_data", JSON.stringify([]));
 });
 // ================End-Initialization================
+// , checkOwnerShip: boolean
 function isPlayerInArea(player, block) {
     const dimension = block.dimension;
     const protectionBlocks = dimension.getEntities({ type: "lc:protection_block" });
@@ -26,11 +27,14 @@ function isPlayerInArea(player, block) {
         const maxZ = center.z + half;
         const isInsideX = placed.x >= minX && placed.x < maxX;
         const isInsideZ = placed.z >= minZ && placed.z < maxZ;
-        if (protectionData.nameTag !== player.nameTag && isInsideX && isInsideZ) {
-            inArea = true;
-        }
-        else {
-            inArea = false;
+        const isOwner = protectionData.nameTag === player.nameTag;
+        const friendList = protectionData.allowList ?? [];
+        const isFriend = friendList.some(entry => entry.nameTag === player.nameTag);
+        if (isInsideX && isInsideZ) {
+            // Kalau bukan owner dan bukan friend => dilarang
+            if (!isOwner && !isFriend) {
+                inArea = true;
+            }
         }
     }
     return inArea;
@@ -43,7 +47,7 @@ world.beforeEvents.playerPlaceBlock.subscribe((data) => {
         // Cancel if player is not owner
         //if (protectionData.nameTag !== player.nameTag) {
         data.cancel = true;
-        player.sendMessage("§cYou can place block in other player plot.");
+        // player.sendMessage("§cYou can place block in other player plot.");
         return;
         //}
     }
@@ -59,7 +63,7 @@ world.beforeEvents.playerBreakBlock.subscribe((data) => {
         // Cancel if player is not owner
         // if (protectionData.nameTag !== player.nameTag) {
         data.cancel = true;
-        player.sendMessage("§cYou can't break this block.");
+        // player.sendMessage("§cYou can't break this block.");
         return;
         // }
     }
@@ -90,25 +94,29 @@ world.beforeEvents.playerInteractWithBlock.subscribe((data) => {
 // ==========detect player in area==========
 system.runInterval(() => {
     const allPlayers = world.getPlayers();
-    const playersInAreaSet = new Set(); // simpan pemain yang berada di area mana pun
+    const playersInAreaSet = new Set();
     allPlayers.forEach(player => {
         const dimension = world.getDimension(player.dimension.id);
         const protectionEntities = dimension.getEntities({ type: "lc:protection_block" });
-        protectionEntities.forEach(protectionEntity => {
-            const block = dimension.getBlock(protectionEntity.location);
-            if (!block)
-                return;
-            const protectionData = new Protection(player, block, dimension).get();
-            const playersInArea = dimension.getEntities({
-                location: protectionEntity.location,
-                type: "minecraft:player",
-                maxDistance: protectionData.protectionSize / 2
+        try {
+            protectionEntities.forEach(protectionEntity => {
+                const block = dimension.getBlock(protectionEntity.location);
+                if (!block)
+                    return;
+                const protectionData = new Protection(player, block, dimension).get();
+                const playersInArea = dimension.getEntities({
+                    location: protectionEntity.location,
+                    type: "minecraft:player",
+                    maxDistance: protectionData.protectionSize / 2
+                });
+                playersInArea.forEach(playerInArea => {
+                    playerInArea.addTag("lc:inarea");
+                    playersInAreaSet.add(playerInArea.name);
+                });
             });
-            playersInArea.forEach(playerInArea => {
-                playerInArea.addTag("lc:inarea");
-                playersInAreaSet.add(playerInArea.name); // tandai pemain ini sedang dalam area
-            });
-        });
+        }
+        catch (err) {
+        }
     });
     // Remove tag from players not in any area
     world.getPlayers().forEach(player => {
@@ -128,6 +136,8 @@ system.runInterval(() => {
             if (block === undefined)
                 return;
             const protectionData = new Protection(player, block, dimension).get();
+            if (protectionData === undefined)
+                return;
             if (!protectionData.settings.showBoundaries)
                 return;
             const loc = protectionEntity.location;
@@ -166,14 +176,17 @@ export class Protection {
         this.defaultPlotName = `${player.nameTag}'s plot`;
     }
     getProtectionData() {
-        const data = world.getDynamicProperty("lc:protection_data");
-        return JSON.parse(data);
+        const rawData = world.getDynamicProperty("lc:protection_data");
+        let data = JSON.parse(rawData);
+        data = data.filter(d => d && typeof d === "object" && d.nameTag);
+        return data;
     }
     debug() {
         const data = this.getProtectionData();
         this.player.sendMessage(`=====================`);
-        for (let i = 0; i <= data.length; i++) {
+        for (let i = 0; i < data.length; i++) {
             this.player.sendMessage(`§a${i} - §7${JSON.stringify(data[i])}`);
+            // console.log(`§a${i} - §7${JSON.stringify(data[i])}`)
         }
     }
     init(protectionSize) {
@@ -187,7 +200,7 @@ export class Protection {
             },
             allowList: []
         };
-        const data = this.getProtectionData();
+        let data = this.getProtectionData();
         data.push(protection_data);
         world.setDynamicProperty("lc:protection_data", JSON.stringify(data));
         console.log(JSON.stringify(protection_data));
@@ -198,8 +211,7 @@ export class Protection {
         data = data.filter(protectionData => {
             return !(protectionData.location.x === this.block.center().x &&
                 protectionData.location.y === this.block.center().y &&
-                protectionData.location.z === this.block.center().z &&
-                protectionData.nameTag === this.player.nameTag);
+                protectionData.location.z === this.block.center().z);
         });
         world.setDynamicProperty("lc:protection_data", JSON.stringify(data));
         console.log("removing data: ", JSON.stringify(this.block.center()));
@@ -209,8 +221,7 @@ export class Protection {
         data = data.filter(protectionData => {
             return (protectionData.location.x === this.block.center().x &&
                 protectionData.location.y === this.block.center().y &&
-                protectionData.location.z === this.block.center().z &&
-                protectionData.nameTag === this.player.nameTag);
+                protectionData.location.z === this.block.center().z);
         });
         return data[0];
     }
@@ -221,3 +232,14 @@ export class Protection {
         world.setDynamicProperty("lc:protection_data", JSON.stringify(data));
     }
 }
+system.afterEvents.scriptEventReceive.subscribe((data) => {
+    if (data.id === "lc:setting") {
+        if (data.message === "reset") {
+            world.setDynamicProperty("lc:protection_data", JSON.stringify([]));
+        }
+        if (data.message === "get") {
+            const data = world.getDynamicProperty("lc:protection_data");
+            console.log(data);
+        }
+    }
+});

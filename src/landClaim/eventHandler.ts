@@ -1,7 +1,7 @@
 import { PlayerBreakBlockBeforeEvent, PlayerInteractWithBlockBeforeEvent, PlayerPlaceBlockBeforeEvent, system, VanillaEntityIdentifier, world } from "@minecraft/server";
 import { Protection } from "./landClaim";
 import { ActionFormData } from "@minecraft/server-ui";
-import { handleAddFriendUI, handleSettingUI, handleShowAllFriendUI } from "./UIHandler";
+import { handleAddFriendUI, handleRemoveFriendUI, handleSettingUI, handleShowAllFriendUI } from "./UIHandler";
 
 // const PROTECTION_SIZES = {
 //   "25": 12,
@@ -48,6 +48,7 @@ export function handleBreakProtectionBlock(data: PlayerBreakBlockBeforeEvent) {
     // console.log("Removing protection entity, size: ", protectionEntity.getDynamicProperty("lc:protection_size"))
     const protection = new Protection(player, block, dimension);
     const protectionData = protection.get();
+    if (protectionData === undefined) return;
     if (protectionData.nameTag === player.nameTag) {
       protection.remove();
       protectionEntity.remove();
@@ -73,6 +74,9 @@ export function handleInteractProtectionBlock(data: PlayerInteractWithBlockBefor
     form.show(player).then(res => {
       if (res.selection === 0) {
         system.run(() => { handleAddFriendUI(player, block, dimension, protectionData) });
+      }
+      if (res.selection === 1) {
+        system.run(() => { handleRemoveFriendUI(player, block, dimension, protectionData) });
       }
       if (res.selection === 2) {
         system.run(() => { handleShowAllFriendUI(player, block, dimension, protectionData) });

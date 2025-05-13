@@ -1,5 +1,6 @@
 import { Block, Dimension, Player, world } from "@minecraft/server";
-import { AllowList, Protection, ProtectionData } from "./landClaim";
+import { Protection } from "./landClaim";
+import { AllowList, ProtectionData } from "./interfaces";
 import { ActionFormData, ModalFormData } from "@minecraft/server-ui";
 
 export function handleSettingUI(player: Player, block: Block, dimension: Dimension, protectionData: ProtectionData) {
@@ -22,8 +23,8 @@ export function handleAddFriendUI(player: Player, block: Block, dimension: Dimen
   const players = world.getPlayers();
   let playerList: string[] = ["None"]
 
-  players.forEach(player => {
-    playerList.push(player.nameTag)
+  players.forEach(p => {
+    if (p.nameTag !== player.nameTag) playerList.push(p.nameTag);
   })
 
   let form = new ModalFormData()
@@ -133,5 +134,44 @@ function handleFriendSettingUI(player: Player, block: Block, dimension: Dimensio
       protectionData.allowList = friendList;
       new Protection(player, block, dimension).set(protectionData);
     }
-  })
+  });
+}
+
+export function handleRemoveFriendUI(player: Player, block: Block, dimension: Dimension, protectionData: ProtectionData) {
+  let form = new ActionFormData()
+    .title("§f§0§1§r§l§0Remove Friend")
+    .body("Select to remove.")
+  let friendList = protectionData.allowList
+  for (let i = 0; i < friendList.length; i++) {
+    form.button(friendList[i].nameTag);
+  }
+  form.show(player).then(res => {
+    if (res.selection !== undefined) {
+      handleRemoveConfirmationUI(player, block, dimension, protectionData, friendList[res.selection])
+    }
+  });
+}
+
+function handleRemoveConfirmationUI(player: Player, block: Block, dimension: Dimension, protectionData: ProtectionData, allowList: AllowList) {
+  let friendName = allowList.nameTag;
+  let form = new ActionFormData()
+    .title("§f§0§1§r§l§0Remove Friend")
+    .body(`Do you really want to remove §b${friendName}§r from the friend list?\n\n\n\n\n\n\n\n\n`)
+    .button("§fYes")
+    .button("Cancel")
+  form.show(player).then(res => {
+    if (res.selection === 0) {
+      let friendList = protectionData.allowList;
+      friendList = friendList.filter(friend => {
+        return !(
+          friend.nameTag === allowList.nameTag
+        );
+      });
+      protectionData.allowList = friendList;
+      new Protection(player, block, dimension).set(protectionData);
+      handleRemoveFriendUI(player, block, dimension, new Protection(player, block, dimension).get());
+    } else {
+      handleRemoveFriendUI(player, block, dimension, protectionData);
+    }
+  });
 }

@@ -19,8 +19,9 @@ export function handleSettingUI(player, block, dimension, protectionData) {
 export function handleAddFriendUI(player, block, dimension, protectionData) {
     const players = world.getPlayers();
     let playerList = ["None"];
-    players.forEach(player => {
-        playerList.push(player.nameTag);
+    players.forEach(p => {
+        if (p.nameTag !== player.nameTag)
+            playerList.push(p.nameTag);
     });
     let form = new ModalFormData()
         .title("Add Friend")
@@ -115,6 +116,42 @@ function handleFriendSettingUI(player, block, dimension, protectionData, allowLi
             });
             protectionData.allowList = friendList;
             new Protection(player, block, dimension).set(protectionData);
+        }
+    });
+}
+export function handleRemoveFriendUI(player, block, dimension, protectionData) {
+    let form = new ActionFormData()
+        .title("§f§0§1§r§l§0Remove Friend")
+        .body("Select to remove.");
+    let friendList = protectionData.allowList;
+    for (let i = 0; i < friendList.length; i++) {
+        form.button(friendList[i].nameTag);
+    }
+    form.show(player).then(res => {
+        if (res.selection !== undefined) {
+            handleRemoveConfirmationUI(player, block, dimension, protectionData, friendList[res.selection]);
+        }
+    });
+}
+function handleRemoveConfirmationUI(player, block, dimension, protectionData, allowList) {
+    let friendName = allowList.nameTag;
+    let form = new ActionFormData()
+        .title("§f§0§1§r§l§0Remove Friend")
+        .body(`Do you really want to remove §b${friendName}§r from the friend list?\n\n\n\n\n\n\n\n\n`)
+        .button("§fYes")
+        .button("Cancel");
+    form.show(player).then(res => {
+        if (res.selection === 0) {
+            let friendList = protectionData.allowList;
+            friendList = friendList.filter(friend => {
+                return !(friend.nameTag === allowList.nameTag);
+            });
+            protectionData.allowList = friendList;
+            new Protection(player, block, dimension).set(protectionData);
+            handleRemoveFriendUI(player, block, dimension, new Protection(player, block, dimension).get());
+        }
+        else {
+            handleRemoveFriendUI(player, block, dimension, protectionData);
         }
     });
 }
