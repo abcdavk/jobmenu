@@ -7,14 +7,24 @@ export function handleSettingUI(player: Player, block: Block, dimension: Dimensi
   let form = new ModalFormData()
     .title("§f§0§1§r§l§0Settings")
     .textField("Land Name:", "Land Name", { defaultValue: protectionData.settings.plotName })
-    .toggle("Show Boundaries", { defaultValue: protectionData.settings.showBoundaries, tooltip: "When enable, will display particle animation around the area."});
+    .toggle("Show Boundaries", { defaultValue: protectionData.settings.showBoundaries, tooltip: "When enable, will display particle animation around the area."})
+    .toggle("Anti Hostile", { defaultValue: protectionData.settings.anti_hostile, tooltip: "When enable, hostiles in the area will be removed."})
+    .toggle("Anti TNT", { defaultValue: protectionData.settings.anti_tnt, tooltip: "When enable, active tnt in the area will be removed."})
+    .toggle("Anti Creeper", { defaultValue: protectionData.settings.anti_creeper, tooltip: "When enable, creeper explosion in the area will be removed."})
+    .toggle("Anti Arrow", { defaultValue: protectionData.settings.anti_arrow, tooltip: "When enable, the arrows in the area will be removed."})
+    .toggle("Anti splash potion", { defaultValue: protectionData.settings.anti_splash_potion, tooltip: "When enable, the splash potions in the area will be removed."});
   form.show(player).then(res => {
     if (res.formValues) {
       protectionData.settings = {
         plotName: res.formValues[0] as string,
-        showBoundaries: res.formValues[1] as boolean
+        showBoundaries: res.formValues[1] as boolean,
+        anti_hostile: res.formValues[2] as boolean,
+        anti_tnt: res.formValues[3] as boolean,
+        anti_creeper: res.formValues[4] as boolean,
+        anti_arrow: res.formValues[5] as boolean,
+        anti_splash_potion: res.formValues[6] as boolean,
       }
-      new Protection(player, block, dimension).set(protectionData);
+      new Protection().set(block, protectionData);
     }
   });
 }
@@ -49,7 +59,7 @@ export function handleAddFriendUI(player: Player, block: Block, dimension: Dimen
             allow_attack_animals: true,
             allow_attack_players: false,
           });
-          new Protection(player, block, dimension).set(protectionData);
+          new Protection().set(block, protectionData);
         }
         if (res.formValues[1] !== "") {
           protectionData.allowList.push({
@@ -64,7 +74,7 @@ export function handleAddFriendUI(player: Player, block: Block, dimension: Dimen
             allow_attack_animals: true,
             allow_attack_players: false,
           });
-          new Protection(player, block, dimension).set(protectionData);
+          new Protection().set(block, protectionData);
         }
       }
     }
@@ -79,7 +89,7 @@ export function handleShowAllFriendUI(player: Player, block: Block, dimension: D
   // let friendCount = 0;
   for (let i = 0; i < friendList.length; i++) {
     // friendCount++
-    form.button(friendList[i].nameTag);
+    form.button(`§r${friendList[i].nameTag}`);
   }
   form.show(player).then(res => {
     if (res.selection !== undefined) {
@@ -132,7 +142,7 @@ function handleFriendSettingUI(player: Player, block: Block, dimension: Dimensio
         allow_attack_players: res.formValues[8] as boolean,
       });
       protectionData.allowList = friendList;
-      new Protection(player, block, dimension).set(protectionData);
+      new Protection().set(block, protectionData);
     }
   });
 }
@@ -143,7 +153,7 @@ export function handleRemoveFriendUI(player: Player, block: Block, dimension: Di
     .body("Select to remove.")
   let friendList = protectionData.allowList
   for (let i = 0; i < friendList.length; i++) {
-    form.button(friendList[i].nameTag);
+    form.button(`§r${friendList[i].nameTag}`);
   }
   form.show(player).then(res => {
     if (res.selection !== undefined) {
@@ -168,8 +178,8 @@ function handleRemoveConfirmationUI(player: Player, block: Block, dimension: Dim
         );
       });
       protectionData.allowList = friendList;
-      new Protection(player, block, dimension).set(protectionData);
-      handleRemoveFriendUI(player, block, dimension, new Protection(player, block, dimension).get());
+      new Protection().set(block, protectionData);
+      handleRemoveFriendUI(player, block, dimension, new Protection().get(block));
     } else {
       handleRemoveFriendUI(player, block, dimension, protectionData);
     }

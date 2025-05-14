@@ -1,5 +1,5 @@
 import { PlayerBreakBlockBeforeEvent, PlayerInteractWithBlockBeforeEvent, PlayerPlaceBlockBeforeEvent, system, VanillaEntityIdentifier, world } from "@minecraft/server";
-import { Protection } from "./landClaim";
+import { Expired, Protection } from "./landClaim";
 import { ActionFormData } from "@minecraft/server-ui";
 import { handleAddFriendUI, handleRemoveFriendUI, handleSettingUI, handleShowAllFriendUI } from "./UIHandler";
 
@@ -26,7 +26,8 @@ export function handlePlaceProtectionBlock(data: PlayerPlaceBlockBeforeEvent) {
     player
   } = data;
   const protectionSize = parseInt(permutationBeingPlaced.type.id.split("_")[2]);
-  new Protection(player, block, dimension).init(protectionSize);
+  new Protection().init(player, block, protectionSize);
+  new Expired().init(player, block);
 
   dimension.spawnEntity("lc:protection_block" as VanillaEntityIdentifier, block.center());
   
@@ -46,11 +47,13 @@ export function handleBreakProtectionBlock(data: PlayerBreakBlockBeforeEvent) {
 
   entities.forEach(protectionEntity => {
     // console.log("Removing protection entity, size: ", protectionEntity.getDynamicProperty("lc:protection_size"))
-    const protection = new Protection(player, block, dimension);
-    const protectionData = protection.get();
+    const protection = new Protection();
+    const expired = new Expired();
+    const protectionData = protection.get(block);
     if (protectionData === undefined) return;
     if (protectionData.nameTag === player.nameTag) {
-      protection.remove();
+      protection.remove(block);
+      expired.remove(block)
       protectionEntity.remove();
     }
   });
@@ -63,7 +66,7 @@ export function handleInteractProtectionBlock(data: PlayerInteractWithBlockBefor
   } = data;
 
   const dimension = world.getDimension(player.dimension.id);
-  const protectionData = new Protection(player, block, dimension).get();
+  const protectionData = new Protection().get(block);
   if (protectionData.nameTag === player.nameTag) {
     let form = new ActionFormData()
       .title('§f§0§1§r§l§0Protection Block Menu')

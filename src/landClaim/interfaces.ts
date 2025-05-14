@@ -15,7 +15,12 @@ export type AllowList = {
 
 export type Settings = {
   plotName: string,
-  showBoundaries: boolean
+  showBoundaries: boolean,
+  anti_tnt: boolean,
+  anti_creeper: boolean,
+  anti_arrow: boolean,
+  anti_splash_potion: boolean,
+  anti_hostile: boolean
 }
 
 export interface ProtectionData {
@@ -24,4 +29,10 @@ export interface ProtectionData {
   protectionSize: number;
   settings: Settings;
   allowList: AllowList[]
+}
+
+export type ExpiredDate = {
+  location: Vector3,
+  date: number,
+  nameTag: string
 }
